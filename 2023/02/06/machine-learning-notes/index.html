@@ -1,0 +1,721 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="mhjiang0408">
+  <meta name="keywords" content="鸡米花">
+  
+    <meta name="description" content="machine learning notestags: notes machine learninggithub的上传，见链接CSDN|github上传与知乎|github仓库更新，git提交代码流程 本学习笔记源代码见github链接github|源代码项目仓库 1.kNN分类算法kNN算法，是在已知各训练数据元类型下，基于欧式距离计算，计算待预测点与什么类距离最近。 1.1 numpy补充学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【机器学习】">
+<meta property="og:url" content="http://mhjiang0408.github.io/2023/02/06/machine-learning-notes/index.html">
+<meta property="og:site_name" content="鸡米花的博客">
+<meta property="og:description" content="machine learning notestags: notes machine learninggithub的上传，见链接CSDN|github上传与知乎|github仓库更新，git提交代码流程 本学习笔记源代码见github链接github|源代码项目仓库 1.kNN分类算法kNN算法，是在已知各训练数据元类型下，基于欧式距离计算，计算待预测点与什么类距离最近。 1.1 numpy补充学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://mhjiang0408.github.io/img/ML_img.png">
+<meta property="article:published_time" content="2023-02-06T09:49:43.000Z">
+<meta property="article:modified_time" content="2023-02-06T10:02:44.095Z">
+<meta property="article:author" content="mhjiang0408">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://mhjiang0408.github.io/img/ML_img.png">
+  
+  
+  
+  <title>【机器学习】 - 鸡米花的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"mhjiang0408.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>mhjiang0408</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【机器学习】"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-06 17:49" pubdate>
+          2023年2月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          70 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">【机器学习】</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="machine-learning-notes"><a href="#machine-learning-notes" class="headerlink" title="machine learning notes"></a>machine learning notes</h1><h6 id="tags-notes-machine-learning"><a href="#tags-notes-machine-learning" class="headerlink" title="tags: notes machine learning"></a>tags: <code>notes</code> <code>machine learning</code></h6><p><strong>github的上传</strong>，见链接<a target="_blank" rel="noopener" href="https://blog.csdn.net/oxofcarrot/article/details/104051984">CSDN|github上传</a>与<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/112884264">知乎|github仓库更新</a>，<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/4925b267f0fd">git提交代码流程</a></p>
+<p>本学习笔记源代码见github链接<a target="_blank" rel="noopener" href="https://github.com/mhjiang0408/machine_learning.git">github|源代码项目仓库</a></p>
+<h2 id="1-kNN分类算法"><a href="#1-kNN分类算法" class="headerlink" title="1.kNN分类算法"></a>1.kNN分类算法</h2><p>kNN算法，是在<strong>已知各训练数据元类型下</strong>，<strong>基于欧式距离计算</strong>，计算待预测点与什么类距离最近。</p>
+<h3 id="1-1-numpy补充"><a href="#1-1-numpy补充" class="headerlink" title="1.1 numpy补充"></a>1.1 numpy补充</h3><p>学习链接<a target="_blank" rel="noopener" href="https://www.cjavapy.com/article/902/">numpy学习网站1</a><br><a target="_blank" rel="noopener" href="http://www.learnfk.com/numpy/numpy-argsort.html">numpy学习网站2</a></p>
+<h4 id="对shape"><a href="#对shape" class="headerlink" title="对shape"></a>对shape</h4><p>有例子<br><strong>核心：0为行轴，shape[0]为有多少行</strong><br>一维：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br>x1 = np.array([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>])<br>y1 = np.array([[<span class="hljs-number">1</span>],[<span class="hljs-number">2</span>]])<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;x1:\n&quot;</span>,x1)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y1:\n&quot;</span>,y1)<br>      <br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;x1.shape:\n&quot;</span>,x1.shape)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y1.shape:\n&quot;</span>,y1.shape)<br>&gt;&gt;&gt;<br>x1:<br> [<span class="hljs-number">1</span> <span class="hljs-number">2</span>]<br>y1:<br> [[<span class="hljs-number">1</span>]<br> [<span class="hljs-number">2</span>]]<br>x1.shape:<br> (<span class="hljs-number">2</span>,)<br>y1.shape:<br> (<span class="hljs-number">2</span>, <span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+<p> 二维：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python">y2 = np.array([[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>],[<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>]])<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y2:\n&quot;</span>,y2)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y2.shape:\n&quot;</span>,y2.shape)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y2.shape[0]:\n&quot;</span>,y2.shape[<span class="hljs-number">0</span>])<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y2.shape[1]:\n&quot;</span>,y2.shape[<span class="hljs-number">1</span>])<br>&gt;&gt;&gt;<br>y2:<br> [[<span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span>]<br> [<span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span>]]<br>y2.shape:<br> (<span class="hljs-number">2</span>, <span class="hljs-number">3</span>)<br>y2.shape[<span class="hljs-number">0</span>]:<br> <span class="hljs-number">2</span><br>y2.shape[<span class="hljs-number">1</span>]:<br> <span class="hljs-number">3</span><br></code></pre></td></tr></table></figure>
+<p> 三维：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"> y3  = np.array([[[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>],[<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>]],[[<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>],[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>]],[[<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>],[<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>]]])<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y3:\n&quot;</span>,y3)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y3.shape:\n&quot;</span>,y3.shape)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y3.shape[0]:\n&quot;</span>,y3.shape[<span class="hljs-number">0</span>])<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y3.shape[1]:\n&quot;</span>,y3.shape[<span class="hljs-number">1</span>])<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;y3.shape[2]:\n&quot;</span>,y3.shape[<span class="hljs-number">2</span>])<br>&gt;&gt;&gt;<br>y3:<br> [[[<span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span>]<br>  [<span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span>]]<br><br> [[<span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span>]<br>  [<span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span>]]<br><br> [[<span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span>]<br>  [<span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span>]]]<br>y3.shape:<br> (<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)<br>y3.shape[<span class="hljs-number">0</span>]:<br> <span class="hljs-number">3</span><br>y3.shape[<span class="hljs-number">1</span>]:<br> <span class="hljs-number">2</span><br>y3.shape[<span class="hljs-number">2</span>]:<br> <span class="hljs-number">3</span><br></code></pre></td></tr></table></figure>
+<p> 其中，x.shape[0]代表包含二维数组的个数，x.shape[1]表示二维数组的行数，x.shape[2]表示二维数组的列数</p>
+<h4 id="对于乘法"><a href="#对于乘法" class="headerlink" title="对于乘法"></a>对于乘法</h4><p> 有学习链接<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/334562951">numpy乘法学习</a><br> 所谓<strong>数组星乘</strong>，就是数组的对应元素相乘，这也是初学NumPy的同学最早接触到的数组乘法。即使两个数组的shape不一样，只要满足特定条件，同样可以用星号相乘，且满足交换律。</p>
+<p> 对于<strong>一维数组</strong>，NumPy的点乘就是向量点乘，其结果是一个标量。对于多维数组，则需要满足一定条件才能实现点乘，且其结果不再是标量，而是一个多维数组。比如，NumPy的矩阵相乘，就是二维数组的点乘，参与点乘的第一个数组的列数必须等于第二个数组的行数。</p>
+<p> 在数学上，二维平面的向量叉乘，其结果是以两个向量为边的菱形的面积，三维空间的向量叉乘，其结果是仍然是一个向量，且垂直于相乘的两个向量，也就是参与相乘的两个向量决定的平面的法向量。nunpy.cross()函数可以实现<strong>向量（一维数组）叉乘</strong>，也可以实现<strong>二维或三维数组的叉乘</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"> &gt;&gt;&gt; a = np.array([<span class="hljs-number">2</span>,<span class="hljs-number">0</span>])<br><span class="hljs-meta">&gt;&gt;&gt; </span>b = np.array([<span class="hljs-number">2</span>,<span class="hljs-number">2</span>])<br><span class="hljs-meta">&gt;&gt;&gt; </span>np.cross(a,b) <span class="hljs-comment"># 平面向量叉乘，其结果是以两个向量为边的菱形的面积</span><br>array(<span class="hljs-number">4</span>)<br><span class="hljs-meta">&gt;&gt;&gt; </span>a = np.array([<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>])<br><span class="hljs-meta">&gt;&gt;&gt; </span>b = np.array([<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>])<br><span class="hljs-meta">&gt;&gt;&gt; </span>np.cross(a,b) <span class="hljs-comment"># x轴叉乘y轴，得到z轴</span><br>array([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>])<br><span class="hljs-meta">&gt;&gt;&gt; </span>np.cross(b,a) <span class="hljs-comment"># 叉乘交换顺序，得到反向的法向量</span><br>array([ <span class="hljs-number">0</span>,  <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>])<br></code></pre></td></tr></table></figure>
+<p>这里的<strong>外乘</strong>，类似于星乘，并不是通用的概念，也是我自己编造的一个说法，来源于numpy.outer()函数。从字面看，outer()函数更像是求外积，但从实际效果看，更像是笛卡尔直积，因此我这里用了“外乘”而不是“外积”。那么，outer()函数究竟能作什么呢？<br>数组A外乘数组B，返回一个二维数组，这个二维数组的第i行是数组A的第i个元素星乘数组B。</p>
+<p><code>**</code>为<strong>乘方</strong>，如<code>a**2=a^2</code></p>
+<p>对<strong>排序argsort</strong>，其返回的是各个排序的index，如b[0]上是最小元素的index，有示例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br>a=np.array([<span class="hljs-number">456</span>,<span class="hljs-number">11</span>,<span class="hljs-number">63</span>])<br>a<br>b=np.argsort(a)<br>b<br>output:<br>array([<span class="hljs-number">456</span>,  <span class="hljs-number">11</span>,  <span class="hljs-number">63</span>])<br>array([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>], dtype=int64)<br></code></pre></td></tr></table></figure>
+<p>对<strong>列表排序函数sorted</strong>，<code>	sorted(iterable[, cmp[, key[, reverse]]]) </code><br>cmp是比较的函数，这个具有两个参数，参数的值都是从可迭代对象中取出，此函数必须遵守的规则为，大于则返回1，小于则返回-1，等于则返回0<br>有示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python">&gt;&gt;&gt;a = [<span class="hljs-number">5</span>,<span class="hljs-number">7</span>,<span class="hljs-number">6</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>]<br><span class="hljs-meta">&gt;&gt;&gt; </span>b = <span class="hljs-built_in">sorted</span>(a) <span class="hljs-comment"># 保留原列表</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>a<br>[<span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">6</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]<br><span class="hljs-meta">&gt;&gt;&gt; </span>b<br>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>]<br><span class="hljs-meta">&gt;&gt;&gt; </span>L=[(<span class="hljs-string">&#x27;b&#x27;</span>,<span class="hljs-number">2</span>),(<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-number">1</span>),(<span class="hljs-string">&#x27;c&#x27;</span>,<span class="hljs-number">3</span>),(<span class="hljs-string">&#x27;d&#x27;</span>,<span class="hljs-number">4</span>)]<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">sorted</span>(L, cmp=<span class="hljs-keyword">lambda</span> x,y:cmp(x[<span class="hljs-number">1</span>],y[<span class="hljs-number">1</span>])) <span class="hljs-comment"># 利⽤cmp函数</span><br>[(<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-number">1</span>), (<span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-number">2</span>), (<span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-number">3</span>), (<span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-number">4</span>)]<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">sorted</span>(L, key=<span class="hljs-keyword">lambda</span> x:x[<span class="hljs-number">1</span>]) <span class="hljs-comment"># 利⽤key</span><br>[(<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-number">1</span>), (<span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-number">2</span>), (<span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-number">3</span>), (<span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-number">4</span>)]<br><span class="hljs-meta">&gt;&gt;&gt; </span>students = [(<span class="hljs-string">&#x27;john&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-number">15</span>), (<span class="hljs-string">&#x27;jane&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">12</span>), (<span class="hljs-string">&#x27;dave&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">10</span>)]<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">sorted</span>(students, key=<span class="hljs-keyword">lambda</span> s: s[<span class="hljs-number">2</span>]) <span class="hljs-comment"># 按年龄排序</span><br>[(<span class="hljs-string">&#x27;dave&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">10</span>), (<span class="hljs-string">&#x27;jane&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">12</span>), (<span class="hljs-string">&#x27;john&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-number">15</span>)]<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">sorted</span>(students, key=<span class="hljs-keyword">lambda</span> s: s[<span class="hljs-number">2</span>], reverse=<span class="hljs-literal">True</span>) <span class="hljs-comment"># 按降序</span><br>[(<span class="hljs-string">&#x27;john&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-number">15</span>), (<span class="hljs-string">&#x27;jane&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">12</span>), (<span class="hljs-string">&#x27;dave&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">10</span>)]<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">sorted</span>(student_tuples, key = itemgetter(<span class="hljs-number">2</span>))  <span class="hljs-comment"># 根据年龄排序</span><br>[(<span class="hljs-string">&#x27;dave&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">10</span>), (<span class="hljs-string">&#x27;jane&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">12</span>), (<span class="hljs-string">&#x27;john&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-number">15</span>)]<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">sorted</span>(student_tuples, key = itemgetter(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>))  <span class="hljs-comment"># 根据成绩和年龄排序</span><br>[(<span class="hljs-string">&#x27;john&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-number">15</span>), (<span class="hljs-string">&#x27;dave&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">10</span>), (<span class="hljs-string">&#x27;jane&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">12</span>)]<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">sorted</span>(student_tuples, key = itemgetter(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), reverse=<span class="hljs-literal">True</span>) <span class="hljs-comment"># 反转排序结果</span><br>[(<span class="hljs-string">&#x27;jane&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">12</span>), (<span class="hljs-string">&#x27;dave&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">10</span>), (<span class="hljs-string">&#x27;john&#x27;</span>, <span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-number">15</span>)]<br></code></pre></td></tr></table></figure>
+<p>对于operator中的<code>itemgetter</code>函数，是返回一个函数；sorted使用的时候，相当于对于每个“行”都用<code>itemgetter</code>获取了他的关键元（可以是一个，也可以是多个组成的元组）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">a = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>] <br><span class="hljs-meta">&gt;&gt;&gt; </span>b=operator.itemgetter(<span class="hljs-number">1</span>)      //定义函数b，获取对象的第<span class="hljs-number">1</span>个域的值<br><span class="hljs-meta">&gt;&gt;&gt; </span>b(a) <br><span class="hljs-number">2</span> <br><span class="hljs-meta">&gt;&gt;&gt; </span>b=operator.itemgetter(<span class="hljs-number">1</span>,<span class="hljs-number">0</span>)   //定义函数b，获取对象的第<span class="hljs-number">1</span>个域和第<span class="hljs-number">0</span>个的值<br><span class="hljs-meta">&gt;&gt;&gt; </span>b(a) <br>(<span class="hljs-number">2</span>, <span class="hljs-number">1</span>) <br></code></pre></td></tr></table></figure>
+<h3 id="1-2-matplotlib补充"><a href="#1-2-matplotlib补充" class="headerlink" title="1.2 matplotlib补充"></a>1.2 matplotlib补充</h3><p>matplotlib绘图基础教程见<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/147644694">知乎|Matplotlib绘图</a><br>matplotlib的绘图函数库<strong>pyplot</strong>有示例如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br><span class="hljs-comment"># 添加3行3列子图中的第1个子图，并将其为当前子图</span><br>plt.subplot(<span class="hljs-number">331</span>)<br>plt.bar(<span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">4</span>),<span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">4</span>))<br><span class="hljs-comment"># 添加3行3列子图中的第5个子图，并将其为当前子图</span><br>plt.subplot(<span class="hljs-number">335</span>)<br>plt.pie([<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>])<br><span class="hljs-comment"># 添加3行3列子图中的第9个子图，并将其为当前子图</span><br><span class="hljs-comment"># 返回值为Axes对象</span><br>ax=plt.subplot(<span class="hljs-number">339</span>)<br><span class="hljs-comment"># 使用Axes的方法（面向对象模式）绘制点</span><br>ax.plot([<span class="hljs-number">1</span>],<span class="hljs-string">&#x27;o&#x27;</span>)<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+<p><strong>散点图绘制</strong>scatter函数，相关链接<a target="_blank" rel="noopener" href="https://blog.csdn.net/mighty13/article/details/114193446">CSDN|scatter</a> <code>matplotlib.pyplot.scatter(x, y, s=None, c=None, marker=None, cmap=None, norm=None, vmin=None, vmax=None, alpha=None, linewidths=None, verts=None, edgecolors=None, *, data=None, **kwargs)</code><br>基本用法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">import</span> random<br><br><span class="hljs-comment"># 0.准备数据</span><br>x = <span class="hljs-built_in">range</span>(<span class="hljs-number">60</span>)<br>y_jiangsu = [random.uniform(<span class="hljs-number">15</span>, <span class="hljs-number">25</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> x]<br>y_beijing = [random.uniform(<span class="hljs-number">5</span>,<span class="hljs-number">18</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> x]<br><br><span class="hljs-comment"># 1.创建画布</span><br>plt.figure(figsize=(<span class="hljs-number">20</span>, <span class="hljs-number">8</span>), dpi=<span class="hljs-number">100</span>)<br><br><span class="hljs-comment"># 2.绘制图像</span><br>plt.scatter(x,y_jiangsu, s=<span class="hljs-number">100</span>, c=<span class="hljs-string">&#x27;deeppink&#x27;</span>, marker=<span class="hljs-string">&#x27;o&#x27;</span>, label = <span class="hljs-string">&quot;江苏&quot;</span>)<br>plt.scatter(x,y_beijing, s=<span class="hljs-number">100</span>, c=<span class="hljs-string">&#x27;darkblue&#x27;</span>, marker=<span class="hljs-string">&#x27;+&#x27;</span>, label = <span class="hljs-string">&quot;北京&quot;</span>)<br><br><span class="hljs-comment"># 2.1 刻度显示</span><br>plt.xticks(x[::<span class="hljs-number">5</span>], x_ticks_label[::<span class="hljs-number">5</span>])<br>plt.yticks(y_ticks[::<span class="hljs-number">5</span>])<br><br><span class="hljs-comment"># 2.2 添加网格显示</span><br>plt.grid(<span class="hljs-literal">True</span>, linestyle=<span class="hljs-string">&quot;--&quot;</span>, alpha=<span class="hljs-number">0.5</span>)<br><br><span class="hljs-comment"># 2.3 添加描述信息</span><br>plt.xlabel(<span class="hljs-string">&quot;时间&quot;</span>, fontsize=<span class="hljs-number">15</span>)<br>plt.ylabel(<span class="hljs-string">&quot;温度&quot;</span>, fontsize=<span class="hljs-number">15</span>)<br>plt.title(<span class="hljs-string">&quot;中午11点--12点某城市温度变化图&quot;</span>, fontsize=<span class="hljs-number">20</span>)<br><br><span class="hljs-comment"># 2.4 图像保存</span><br>plt.savefig(<span class="hljs-string">&quot;./test.png&quot;</span>)<br><br><span class="hljs-comment"># 2.5 添加图例</span><br>plt.legend(loc=<span class="hljs-string">&quot;best&quot;</span>)<br><br><span class="hljs-comment"># 3.图像显示</span><br>plt.show()<br></code></pre></td></tr></table></figure>
+<h3 id="1-3-tile"><a href="#1-3-tile" class="headerlink" title="1.3 tile"></a>1.3 tile</h3><p><code>tile(inX,(m,n))</code>对inX，横向重复n次，竖向重复m次</p>
+<h2 id="2-决策树算法"><a href="#2-决策树算法" class="headerlink" title="2.决策树算法"></a>2.决策树算法</h2><p>本次采用<strong>ID3</strong>算法来划分数据集，具体算法可见链接<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/ID3_algorithm">wiki|ID3_algorithm</a>。</p>
+<p>注意：决策树算法是<strong>已知各数据元是什么类型</strong>，只是给出类型<strong>划分的依据</strong>。对于每个<strong>数据元</strong>，可以有很多特征（一个数据元是一行，是一条记录），但每次划分数据集的时候，只会使用一个参考特征。</p>
+<h3 id="2-1-信息增益"><a href="#2-1-信息增益" class="headerlink" title="2.1 信息增益"></a>2.1 信息增益</h3><p>划分数据的依据就是信息增益，即将无序的数据变有序——使用信息论度量信息。<br><strong>定义1</strong>：符号$x_i$的<strong>信息</strong>$l(x_i)&#x3D;-log_2p(x_i)$，其中$p(x_i)$为选择该分类的概率<br><strong>定义2</strong>：<strong>熵</strong>为所有类别选择的信息期望值，$H&#x3D;-\sum_{i&#x3D;1}^n{p\left( x_i \right) \log _2p\left( x_i \right)}$</p>
+<p>对于数据集，其$p(x_i)$为<code>probOfKey = float(numOfTheKey)/(len(dataSet))</code><br>对于每种划分方式，其信息熵为以每个值为划分值划出的数目来算概率，再乘上该划分值划出的dataSet的信息熵，即：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> uniqueVals:<br>    <span class="hljs-comment"># 对于一个特征的每个数值，都要以他为划分值算一下划分结果与信息熵</span><br>    subDataSet = splitDataSet(dataSet,i,value)<br>    <span class="hljs-comment"># 算熵(概率就是被筛出来的概率)</span><br>    prob = <span class="hljs-built_in">len</span>(subDataSet)/<span class="hljs-built_in">float</span>(<span class="hljs-built_in">len</span>(dataSet))<br>    newEntopy += prob* calcShannonEnt(subDataSet)<br></code></pre></td></tr></table></figure>
+
+<p>补充，<code>字典.keys()</code>可以遍历字典的所有key值，<code>if currentLabel not in labelCounts.keys(): </code></p>
+<p>当熵越大，说明混合的数据越多。</p>
+<h4 id="划分数据集"><a href="#划分数据集" class="headerlink" title="划分数据集"></a>划分数据集</h4><p>对每个特征划分数据集的结果计算一次信息熵，比较得按照哪个特征划分数据集是最好的划分方式。</p>
+<p><strong>注意！</strong> 在选择用哪个特征时，每个特征对应的信息增益等于<strong>原始熵-该特征对应信息熵</strong>。而对于该特征对应的信息熵，每个概率就是在每个值下筛出去的概率，每个值对应的<strong>信息就是在该值下筛出来的数据集的信息熵</strong>。</p>
+<p>对于数组的扩充，要将一个列表的各个元素扩充进来，则用<code>extend</code>，而对于<code>append</code>，是列表扩充为被扩充列表的一个元素。如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">a = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-string">&#x27;3&#x27;</span>]<br>a.append(b)<br>b = [<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-string">&#x27;6&#x27;</span>]<br>c = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-string">&#x27;3&#x27;</span>]<br>c.extend(b)<br><span class="hljs-meta">&gt;&gt;&gt; </span>a<br>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&#x27;3&#x27;</span>, [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;6&#x27;</span>]]<br><span class="hljs-meta">&gt;&gt;&gt; </span>c<br>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&#x27;3&#x27;</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;6&#x27;</span>] <br></code></pre></td></tr></table></figure>
+<p>补充：<code>set</code>，集合函数，是python的内置函数，接收一个list为参数，创建一个无序不重复元素集，可进行关系测试，删除重复数据，还可以计算交集、差集、并集等。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python">list1=[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]<br>s=<span class="hljs-built_in">set</span>(list1)<br><span class="hljs-built_in">print</span>(s)<br>s.add(<span class="hljs-number">4</span>)<br>s.add(<span class="hljs-number">5</span>)<br>s.remove(<span class="hljs-string">&#x27;zhang&#x27;</span>)<br><span class="hljs-built_in">print</span>(s)<br><span class="hljs-comment">#交集，使用&amp;操作符</span><br>s3=s1&amp;s2<br><span class="hljs-comment">#并集，使用|操作符</span><br>s4=s1|s2<br>输出：<br><span class="hljs-built_in">set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>])<br><span class="hljs-built_in">set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>])<br></code></pre></td></tr></table></figure>
+<h3 id="2-2-递归构建决策树"><a href="#2-2-递归构建决策树" class="headerlink" title="2.2 递归构建决策树"></a>2.2 递归构建决策树</h3><p><strong>递归结束</strong>（即构建出叶子结点）的条件是在该结点下的分支所有实例都有相同的分类；若数据集已经处理了所有属性，但还是有分支类别标签<strong>不唯一</strong>，则使用<strong>多数表决</strong>的方法来确定该叶子结点的分类。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">creatTree</span>(<span class="hljs-params">dataSet,labels</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;递归创建树</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Args:</span><br><span class="hljs-string">        dataSet (_type_matrix): 数据集</span><br><span class="hljs-string">        labels (_type_list): 所有特征的标签</span><br><span class="hljs-string">    return:创建出的树，myTree[a][b]，a是对应的结点，b是节点下对应的分支的值</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    classList = [example[-<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> example <span class="hljs-keyword">in</span> dataSet]<br>    <span class="hljs-keyword">if</span> classList.count(classList[<span class="hljs-number">0</span>]) == <span class="hljs-built_in">len</span>(classList):<br>        <span class="hljs-comment"># 若跟第一个相同的元素个数与总数目一致，则说明类别完全相同，可以退出</span><br>        <span class="hljs-keyword">return</span> classList[<span class="hljs-number">0</span>] <span class="hljs-comment"># 返回结点类别标签</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(dataSet[<span class="hljs-number">0</span>])==<span class="hljs-number">1</span>:<br>        <span class="hljs-comment"># 当遍历完了所有特征还没出来，就返回次数最多的类别</span><br>        <span class="hljs-keyword">return</span> majorityCnt(classList)<br>    <span class="hljs-comment"># 若要选，选出最佳并建立树</span><br>    bestFeat = chooseFeatureToSplit(dataSet)<br>    bestFeatLabel = labels[bestFeat]<br>    myTree = &#123;bestFeatLabel:&#123;&#125;&#125;<br>    <span class="hljs-keyword">del</span>(labels[bestFeat])   <span class="hljs-comment"># 删除元素</span><br>    featValues = [example[bestFeat] <span class="hljs-keyword">for</span> example <span class="hljs-keyword">in</span> dataSet]<br>    uniqueVals = <span class="hljs-built_in">set</span>(featValues)<br>    <span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> uniqueVals:<br>        subLabels = labels[:]<br>        <span class="hljs-comment"># myTree[a][b]，a是对应的结点，b是节点下对应的分支的值</span><br>        myTree[bestFeatLabel][value] = creatTree(splitDataSet(dataSet,bestFeat,value),subLabels)<br>        <span class="hljs-comment"># 这里就解释了，为什么上面特征数的统计用dataSet[0]；每次向下一级递归函数传的是splitDataSet，</span><br>    <span class="hljs-keyword">return</span> myTree<br></code></pre></td></tr></table></figure>
+<h4 id="递归思路"><a href="#递归思路" class="headerlink" title="递归思路"></a>递归思路</h4><p>如果<strong>不是出口</strong>，creatTree返回的是一个树（即一个value是字典的字典），<strong>这个树挂载在上一级结点上</strong>，即挂在myTree[feat][value]；因此，要访问叶子结点，就是<code>myTree[feat1][feat1Value1][feat2][feat2Value2][feat3][feat3Value3]...[featNValueN]</code></p>
+<p>如果<strong>是出口</strong>，creatTree返回的是一个列表，也就是使得上一节点依value下来的分支为一个列表，程序结束，回溯。</p>
+<h3 id="2-3-绘制树形图"><a href="#2-3-绘制树形图" class="headerlink" title="2.3 绘制树形图"></a>2.3 绘制树形图</h3><p>matplotlib中的<code>ax1</code>是来自于子图，是通过在画布<code>fig</code>中<strong>添加子图</strong><code>ax1=fig.add_subplot</code>，进而在子图上绘制曲线。</p>
+<h2 id="补充：Anaconda和Pycharm的安装与配置"><a href="#补充：Anaconda和Pycharm的安装与配置" class="headerlink" title="补充：Anaconda和Pycharm的安装与配置"></a>补充：Anaconda和Pycharm的安装与配置</h2><p>参考教学链接<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yuxuefeng/articles/9235431.html">cnblogs|Anaconda和Pycharm的安装和配置</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AC%94%E8%AE%B0/" class="category-chain-item">笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+      
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【机器学习】</div>
+      <div>http://mhjiang0408.github.io/2023/02/06/machine-learning-notes/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>mhjiang0408</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/06/basicAI/" title="【AU3323】人工智能基础笔记">
+                        <span class="hidden-mobile">【AU3323】人工智能基础笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://mhjiang0408.github.io/2023/02/06/machine-learning-notes/';
+          this.page.identifier = '/2023/02/06/machine-learning-notes/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
